@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Mamma/Pappauke" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <title>Mamma-/pappauke</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #d1d5db;
+      --header: #e5e7eb;
+      --section: #f3f4f6;
+      --button: #111827;
+      --buttonText: white;
+      --accent: #2563eb;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      min-height: 100vh;
+      padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 14px;
+    }
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(244,246,248,.96);
+      backdrop-filter: blur(8px);
+      padding: 10px 0 12px;
+    }
+    h1 {
+      font-size: 24px;
+      line-height: 1.15;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+    .reset {
+      width: 100%;
+      min-height: 50px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--button);
+      color: var(--buttonText);
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,.10);
+    }
+    .reset:active { transform: scale(.99); }
+    .note {
+      margin: 8px 2px 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+      border: 1px solid #e5e7eb;
+    }
+    .row, .head, .section {
+      display: grid;
+      grid-template-columns: 1fr 64px 64px;
+      align-items: center;
+    }
+    .head {
+      background: var(--header);
+      min-height: 46px;
+      font-weight: 800;
+      border-bottom: 1px solid var(--line);
+    }
+    .section {
+      background: var(--section);
+      min-height: 40px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      border-bottom: 1px solid var(--line);
+    }
+    .row {
+      min-height: 56px;
+      border-bottom: 1px solid var(--line);
+    }
+    .row:last-child { border-bottom: 0; }
+    .item {
+      padding: 0 14px;
+      font-size: 17px;
+      font-weight: 500;
+    }
+    .col {
+      height: 100%;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-left: 1px solid var(--line);
+    }
+    .head .col, .section .col { min-height: inherit; }
+    .checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 30px;
+      height: 30px;
+      border: 2px solid #6b7280;
+      border-radius: 8px;
+      background: #fff;
+      display: inline-grid;
+      place-content: center;
+      cursor: pointer;
+      margin: 0;
+    }
+    .checkbox:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .checkbox:checked::after {
+      content: "✓";
+      color: #fff;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 900;
+      transform: translateY(-1px);
+    }
+    .disabled {
+      color: #c4c7cc;
+      font-size: 20px;
+      user-select: none;
+    }
+    .footer {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      padding: 14px 6px 28px;
+    }
+    @media (max-width: 430px) {
+      .wrap { padding: 10px; }
+      h1 { font-size: 22px; }
+      .row, .head, .section { grid-template-columns: 1fr 58px 58px; }
+      .item { font-size: 16px; padding-left: 12px; }
+      .checkbox { width: 31px; height: 31px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="top">
+      <h1>Sjekkliste mamma-/pappauke</h1>
+      <button class="reset" id="resetBtn">Ny uke/Nullstill</button>
+      <div class="note">Kryssene lagres automatisk på denne telefonen. Ting som ikke står på listen, er den andres ansvar å etterlyse.</div>
+    </div>
+
+    <div class="card" id="list">
+      <div class="head">
+        <div class="item">Pakkeliste</div>
+        <div class="col">T</div>
+        <div class="col">A</div>
+      </div>
+
+      <div class="section"><div class="item">BASIS</div><div class="col"></div><div class="col"></div></div>
+      <div class="row" data-id="stromper"><div class="item">Strømper</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="truser"><div class="item">Truser</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="tskjorter"><div class="item">T-skjorter</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="gensere"><div class="item">Gensere</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="bukser"><div class="item">Bukser/shorts</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="jakke"><div class="item">Jakke</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="gymtoy"><div class="item">Gymtøy</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="gymsko"><div class="item">Gymsko</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="ekstrasko"><div class="item">Ekstra sko</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="pysj"><div class="item">Pysj / nattøy</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+
+      <div class="section"><div class="item">TEKNIKK / ANNET</div><div class="col"></div><div class="col"></div></div>
+      <div class="row" data-id="telefonlader"><div class="item">Telefonlader</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="ellader"><div class="item">El-lader</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="chromebook"><div class="item">Chromebook</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="chromebooklader"><div class="item">Chromebook-lader</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="pute"><div class="item">Pute</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><span class="disabled">—</span></div></div>
+
+      <div class="section"><div class="item">SOMMERTID</div><div class="col"></div><div class="col"></div></div>
+      <div class="row" data-id="badeshorts"><div class="item">Badeshorts</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+
+      <div class="section"><div class="item">VINTERTID</div><div class="col"></div><div class="col"></div></div>
+      <div class="row" data-id="stillongs"><div class="item">Stillongs</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="votter"><div class="item">Votter</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="lue"><div class="item">Lue</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="hals"><div class="item">Hals</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+
+      <div class="section"><div class="item">ETTER BEHOV</div><div class="col"></div><div class="col"></div></div>
+      <div class="row" data-id="regntoy"><div class="item">Regntøy</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+      <div class="row" data-id="stovler"><div class="item">Støvler</div><div class="col"><input class="checkbox" type="checkbox" data-person="T"></div><div class="col"><input class="checkbox" type="checkbox" data-person="A"></div></div>
+    </div>
+    <div class="footer">Mamma-/pappauke</div>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "mammaPappaukeChecklist_v1";
+    const checks = [...document.querySelectorAll('.checkbox')];
+
+    function keyFor(cb) {
+      const row = cb.closest('.row');
+      return `${row.dataset.id}_${cb.dataset.person}`;
+    }
+
+    function loadState() {
+      const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      checks.forEach(cb => cb.checked = !!state[keyFor(cb)]);
+    }
+
+    function saveState() {
+      const state = {};
+      checks.forEach(cb => state[keyFor(cb)] = cb.checked);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    checks.forEach(cb => cb.addEventListener('change', saveState));
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (confirm('Nullstille alle kryss for ny uke?')) {
+        checks.forEach(cb => cb.checked = false);
+        saveState();
+      }
+    });
+
+    loadState();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+    }
+  </script>
+</body>
+</html>
